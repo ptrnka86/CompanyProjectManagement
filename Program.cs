@@ -73,8 +73,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration.GetSection("TokenAuthentication: Issuer").Value,
-        ValidAudience = builder.Configuration.GetSection("TokenAuthentication: Audience").Value,
+        ValidIssuer = builder.Configuration.GetSection("TokenAuthentication:Issuer").Value,
+        ValidAudience = builder.Configuration.GetSection("TokenAuthentication:Audience").Value,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });

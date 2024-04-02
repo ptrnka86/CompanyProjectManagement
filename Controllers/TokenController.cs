@@ -1,14 +1,16 @@
 using CompanyProjectManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.ComponentModel.DataAnnotations;
+using USP.Controllers;
 
 namespace CompanyProjectManagement.Controllers
 {
     [ApiExplorerSettings(GroupName = "core")]
     [ApiController]
     [Route("api")]
-    public class TokenController : ControllerBase
+    public class TokenController : BaseController
     {
 
         private readonly IUserProvider _userProvider;
@@ -36,6 +38,15 @@ namespace CompanyProjectManagement.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("test")]
+        [Produces("application/json")]
+        public async Task<Guid?> Test()
+        {
+            return UserId;
         }
     }
 }
