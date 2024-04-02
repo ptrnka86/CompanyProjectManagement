@@ -2,6 +2,9 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Essity.Bp.Web;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +29,55 @@ builder.Services.AddSwaggerGen(c =>
             Version = "coreV1",
             Description = "Core swagger doc"
         });
+
+        c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                Password = new OpenApiOAuthFlow
+                {
+                    TokenUrl = new Uri("/api/login", UriKind.Relative),
+                    Scopes = new Dictionary<string, string> { { "readAccess", "Access read operations" }, { "writeAccess", "Access write operations" } }
+                }
+            }
+        });
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement{{
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "oauth2"
+                }
+            }, new List<string>()
+        }});
     });
+
+string? secretKey = builder.Configuration.GetSection("TokenAuthentication:SecretKey").Value;
+if (string.IsNullOrEmpty(secretKey))
+{
+    throw new ArgumentNullException("TokenAuthentication:SecretKey", "Secret key not found or empty.");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration.GetSection("TokenAuthentication: Issuer").Value,
+        ValidAudience = builder.Configuration.GetSection("TokenAuthentication: Audience").Value,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+});
 
 var app = builder.Build();
 

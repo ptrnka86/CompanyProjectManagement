@@ -2,20 +2,22 @@
 using Autofac.Extensions.DependencyInjection;
 using CompanyProjectManagement.Security;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 
 namespace Essity.Bp.Web;
 
 public class AutofacRegistrationModule(IConfiguration configuration) : Module
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S3604:Member initializer values should not be redundant", Justification = "<Pending>")]
     public IConfiguration Configuration { get; } = configuration;
 
     protected override void Load(ContainerBuilder builder)
     {
         base.Load(builder);
 
+        builder.RegisterInstance(Configuration).As<IConfiguration>().SingleInstance();
         builder.RegisterType<UserProvider>().As<IUserProvider>().InstancePerLifetimeScope();
+        builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
     }
 
 

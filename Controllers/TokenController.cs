@@ -12,10 +12,12 @@ namespace CompanyProjectManagement.Controllers
     {
 
         private readonly IUserProvider _userProvider;
+        private readonly ITokenGenerator _tokenGenerator;
 
-        public TokenController(IUserProvider userProvider)
+        public TokenController(IUserProvider userProvider, ITokenGenerator tokenGenerator)
         {
             _userProvider = userProvider;
+            _tokenGenerator = tokenGenerator;
         }
 
         [HttpPost]
@@ -27,9 +29,8 @@ namespace CompanyProjectManagement.Controllers
             try
             {
                 var user = _userProvider.LoginByUsernamePassAsync(username, password);
-                // TODO: implementovat generovanie JWS tokenu
-
-                return Ok();
+                string token = _tokenGenerator.GenerateTokenSync(user);
+                return Ok(new { access_token = token });
             }
             catch (Exception ex)
             {
