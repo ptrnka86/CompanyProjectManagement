@@ -30,6 +30,13 @@ builder.Services.AddSwaggerGen(c =>
             Description = "Core swagger doc"
         });
 
+        c.SwaggerDoc("project", new OpenApiInfo
+        {
+            Title = "Project",
+            Version = "projectV1",
+            Description = "Project swagger doc"
+        });
+
         c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OAuth2,
@@ -88,6 +95,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/core/swagger.json", "Core API");
+        c.SwaggerEndpoint("/swagger/project/swagger.json", "Project API");
     });
 }
 
