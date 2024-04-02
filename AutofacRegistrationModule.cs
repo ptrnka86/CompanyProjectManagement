@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CompanyProjectManagement.Security;
+using CompanyProjectManagement.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -18,6 +19,8 @@ public class AutofacRegistrationModule(IConfiguration configuration) : Module
         builder.RegisterInstance(Configuration).As<IConfiguration>().SingleInstance();
         builder.RegisterType<UserProvider>().As<IUserProvider>().InstancePerLifetimeScope();
         builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
+
+        builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerLifetimeScope();
     }
 
 
