@@ -15,11 +15,13 @@ namespace CompanyProjectManagement.Controllers
 
         private readonly IUserProvider _userProvider;
         private readonly ITokenGenerator _tokenGenerator;
+        private readonly ILogger<TokenController> _logger;
 
-        public TokenController(IUserProvider userProvider, ITokenGenerator tokenGenerator)
+        public TokenController(IUserProvider userProvider, ITokenGenerator tokenGenerator, ILogger<TokenController> logger)
         {
             _userProvider = userProvider;
             _tokenGenerator = tokenGenerator;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -32,21 +34,15 @@ namespace CompanyProjectManagement.Controllers
             {
                 var user = _userProvider.LoginByUsernamePassAsync(username, password);
                 string token = _tokenGenerator.GenerateTokenSync(user);
+
+                _logger.LogInformation($"User '{ username }' was successfully logged in");
                 return Ok(new { access_token = token });
             }
             catch (Exception ex)
             {
+                _logger.LogError($"User login error for '{username}'");
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("test")]
-        [Produces("application/json")]
-        public async Task<Guid?> Test()
-        {
-            return UserId;
         }
     }
 }
