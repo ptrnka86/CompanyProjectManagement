@@ -21,7 +21,9 @@ namespace CompanyProjectManagement.Service
         }
         public async Task<ProjectModel> CreateAsync(NewProjectRequestModel model)
         {
-            if(model.Abbrevation.IsNullOrEmpty())
+            if (model.Name.IsNullOrEmpty())
+                throw new ArgumentNullException(nameof(model.Name));
+            if (model.Abbrevation.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(model.Abbrevation));
             if (model.Customer.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(model.Customer));
@@ -56,6 +58,8 @@ namespace CompanyProjectManagement.Service
         {
             if (model.Id.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(model.Id));
+            if (model.Name.IsNullOrEmpty())
+                throw new ArgumentNullException(nameof(model.Name));
             if (model.Abbrevation.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(model.Abbrevation));
             if (model.Customer.IsNullOrEmpty())
