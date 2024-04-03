@@ -69,7 +69,13 @@ namespace CompanyProjectManagement.Data.Repository
 
         public Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            var xmlData = GetAllXMLData();
+
+            xmlData.ProjectList.RemoveAll(p => p.Id == id);
+
+            InsertXMLData(xmlData);
+
+            return Task.CompletedTask;
         }
 
         public async Task<List<ProjectModel>> GetAllAsync()
@@ -80,11 +86,7 @@ namespace CompanyProjectManagement.Data.Repository
 
             foreach ( var project in xmlData.ProjectList) 
             { 
-                var projectModel = new ProjectModel();
-                projectModel.Id = project.Id;
-                projectModel.Name = project.Name;
-                projectModel.Abbrevation = project.Abbrevation;
-                projectModel.Customer = project.Customer;
+                var projectModel = GetProjectModel(project);
 
                 projectModels.Add(projectModel);
             }
@@ -100,11 +102,7 @@ namespace CompanyProjectManagement.Data.Repository
             if (project == null)
                 throw new InvalidOperationException($"{ id } was not found");
 
-            var projectModel = new ProjectModel();
-            projectModel.Id = project.Id;
-            projectModel.Name = project.Name;
-            projectModel.Abbrevation = project.Abbrevation;
-            projectModel.Customer = project.Customer;
+            var projectModel = GetProjectModel(project);
 
             return Task.FromResult(projectModel);
         }
@@ -125,6 +123,17 @@ namespace CompanyProjectManagement.Data.Repository
             InsertXMLData(xmlData);
 
             return Task.CompletedTask;
+        }
+
+        private ProjectModel GetProjectModel(Project project)
+        {
+            var projectModel = new ProjectModel();
+            projectModel.Id = project.Id;
+            projectModel.Name = project.Name;
+            projectModel.Abbrevation = project.Abbrevation;
+            projectModel.Customer = project.Customer;
+
+            return projectModel;
         }
 
         private Projects GetAllXMLData()
