@@ -1,4 +1,4 @@
-using CompanyProjectManagement.Model;
+using CompanyProjectManagement.Data.Model;
 using CompanyProjectManagement.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

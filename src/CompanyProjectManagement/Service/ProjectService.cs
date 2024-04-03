@@ -1,5 +1,5 @@
-﻿using CompanyProjectManagement.Model;
-using CompanyProjectManagement.Repository;
+﻿using CompanyProjectManagement.Data.Repository;
+using CompanyProjectManagement.Data.Model;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CompanyProjectManagement.Service

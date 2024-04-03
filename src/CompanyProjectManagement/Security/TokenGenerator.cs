@@ -1,4 +1,4 @@
-﻿using CompanyProjectManagement.Model;
+﻿using CompanyProjectManagement.Data.Model;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

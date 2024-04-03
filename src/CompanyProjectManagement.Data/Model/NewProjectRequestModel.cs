@@ -1,4 +1,4 @@
-﻿namespace CompanyProjectManagement.Model
+﻿namespace CompanyProjectManagement.Data.Model
 {
     public class NewProjectRequestModel
     {

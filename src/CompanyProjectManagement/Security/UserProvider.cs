@@ -1,4 +1,4 @@
-﻿using CompanyProjectManagement.Model;
+﻿using CompanyProjectManagement.Data.Model;
 using Microsoft.AspNetCore.Identity;
 
 namespace CompanyProjectManagement.Security
