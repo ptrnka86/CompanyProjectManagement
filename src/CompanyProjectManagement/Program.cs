@@ -1,10 +1,11 @@
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using Essity.Bp.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CompanyProjectManagement;
+using Autofac.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,12 @@ builder.Host.ConfigureContainer<ContainerBuilder>(a =>
 }
 );
 // Add services to the container.
-
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(GlobalExceptionFilter));
+});
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
-namespace Essity.Bp.Web;
+namespace CompanyProjectManagement;
 
 public class AutofacRegistrationModule(IConfiguration configuration) : Module
 {

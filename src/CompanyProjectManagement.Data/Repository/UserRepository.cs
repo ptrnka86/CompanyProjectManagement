@@ -82,7 +82,5 @@ namespace CompanyProjectManagement.Data.Repository
             string fullPath = filePath + "//" + fileName;
             return new XmlFileManager<Users>(fullPath);
         }
-
-        
     }
 }
