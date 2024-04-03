@@ -1,15 +1,22 @@
 ﻿using CompanyProjectManagement.Data.Model;
+using CompanyProjectManagement.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 
 namespace CompanyProjectManagement.Security
 {
     public interface IUserProvider
     {
-        UserModel LoginByUsernamePassAsync(string username, string password);
+        Task<UserModel> LoginByUsernamePassAsync(string username, string password);
     }
     public class UserProvider : IUserProvider
     {
-        public UserModel LoginByUsernamePassAsync(string username, string password)
+        private readonly IUserRepository _userRepository;
+        public UserProvider(IUserRepository userRepository)
+        {
+                _userRepository = userRepository;
+        }
+
+        public async Task<UserModel> LoginByUsernamePassAsync(string username, string password)
         {
             if(username == null)
                 throw new ArgumentNullException(nameof(username));
@@ -18,14 +25,10 @@ namespace CompanyProjectManagement.Security
                 throw new ArgumentNullException(nameof(password));
 
             // TODO: implementovat nacitanie uzivatelov z xml suboru
-            if (password != "demo123" || username != "demo")
+            if(password != await _userRepository.GetPasswordByUserNameAsync(username))
                 throw new ArgumentException("Incorrect userName or password");
             
-            return new UserModel
-            {
-                UserId = new Guid("b6a33530-4c40-4b99-b9e9-989fc8157e59"),
-                UserName = username,
-            };
+            return await _userRepository.GetByUserNameAsync(username);
         }
     }
 }

@@ -22,6 +22,7 @@ public class AutofacRegistrationModule(IConfiguration configuration) : Module
         builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().InstancePerLifetimeScope();
 
         builder.RegisterType<ProjectRepository>().As<IProjectRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
 
         builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerLifetimeScope();
     }

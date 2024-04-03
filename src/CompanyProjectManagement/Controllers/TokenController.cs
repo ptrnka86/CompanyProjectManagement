@@ -32,7 +32,7 @@ namespace CompanyProjectManagement.Controllers
         {
             try
             {
-                var user = _userProvider.LoginByUsernamePassAsync(username, password);
+                var user = await _userProvider.LoginByUsernamePassAsync(username, password);
                 string token = _tokenGenerator.GenerateTokenSync(user);
 
                 _logger.LogInformation($"User '{ username }' was successfully logged in");
