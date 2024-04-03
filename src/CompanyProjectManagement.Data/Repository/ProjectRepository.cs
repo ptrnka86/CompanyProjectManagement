@@ -27,7 +27,44 @@ namespace CompanyProjectManagement.Data.Repository
         }
         public Task<string> CreateAsync(NewProjectRequestModel model)
         {
-            throw new NotImplementedException();
+ 
+            var xmlData = GetAllXMLData();
+
+            var newProject = new Project();
+
+            newProject.Id = GetNewId(xmlData);
+            newProject.Name = model.Name;
+            newProject.Abbrevation = model.Abbrevation;
+            newProject.Customer = model.Customer;
+
+            xmlData.ProjectList.Add(newProject);
+
+            InsertXMLData(xmlData);
+
+            return Task.FromResult(newProject.Id);
+        }
+
+        /// <summary>
+        /// Check all ids and return max id increased by 1
+        /// </summary>
+        /// <param name="xmlData"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        private string GetNewId(Projects xmlData)
+        {
+            var allIds = xmlData.ProjectList.Select(x => x.Id.Substring(3));
+            int newId = 1;
+            foreach (var id in allIds)
+            {
+                try {
+                    int xmlId = Int32.Parse(id);
+                    newId = xmlId >= newId ? xmlId + 1 : newId; 
+                } catch  { 
+                    throw new ArgumentOutOfRangeException($"Incorrect id '{ id }' in project.xml file");
+                }
+            }
+
+            return "prj" + newId;
         }
 
         public Task DeleteAsync(string id)
@@ -37,16 +74,11 @@ namespace CompanyProjectManagement.Data.Repository
 
         public async Task<List<ProjectModel>> GetAllAsync()
         {
-            string filePath = _configuration["AppSettings:XmlFilesPath"];
-            string fileName = "Project.xml";
-            string fullPath = filePath + "//" +  fileName;
-            var xmlReader = new XmlFileManager<Projects>(fullPath);
-
-            var xmlData = xmlReader.ReadData();
+            var xmlData = GetAllXMLData();
 
             var projectModels = new List<ProjectModel>();
 
-            foreach ( var project in xmlData.Project) 
+            foreach ( var project in xmlData.ProjectList) 
             { 
                 var projectModel = new ProjectModel();
                 projectModel.Id = project.Id;
@@ -62,17 +94,11 @@ namespace CompanyProjectManagement.Data.Repository
 
         public Task<ProjectModel> GetByIdAsync(string id)
         {
-            string filePath = _configuration["AppSettings:XmlFilesPath"];
-            string fileName = "Project.xml";
-            string fullPath = filePath + "//" + fileName;
-            var xmlReader = new XmlFileManager<Projects>(fullPath);
-
-            var xmlData = xmlReader.ReadData();
-            var project = xmlData.Project.FirstOrDefault(p => p.Id == id);
+            
+            var project = GetAllXMLData().ProjectList.FirstOrDefault(p => p.Id == id);
 
             if (project == null)
                 throw new InvalidOperationException($"{ id } was not found");
-
 
             var projectModel = new ProjectModel();
             projectModel.Id = project.Id;
@@ -85,7 +111,39 @@ namespace CompanyProjectManagement.Data.Repository
 
         public Task UpdateAsync(ProjectModel model)
         {
-            throw new NotImplementedException();
+            var xmlData = GetAllXMLData();
+
+            var project = xmlData.ProjectList.FirstOrDefault(p => p.Id == model.Id);
+
+            project.Name = model.Name;
+            project.Abbrevation = model.Abbrevation;
+            project.Customer = model.Customer;
+
+            InsertXMLData(xmlData);
+
+            return Task.CompletedTask;
+        }
+
+        private Projects GetAllXMLData()
+        {
+            var xmlReader = GetXmlFileManager();
+
+            return xmlReader.ReadData();
+        }
+
+        private void InsertXMLData(Projects model)
+        {
+            var xmlReader = GetXmlFileManager();
+
+            xmlReader.WriteData(model);
+        }
+
+        private XmlFileManager<Projects> GetXmlFileManager()
+        {
+            string filePath = _configuration["AppSettings:XmlFilesPath"];
+            string fileName = "Project.xml";
+            string fullPath = filePath + "//" + fileName;
+            return new XmlFileManager<Projects>(fullPath);
         }
     }
 }

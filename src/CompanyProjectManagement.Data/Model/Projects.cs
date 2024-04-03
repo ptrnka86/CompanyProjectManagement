@@ -12,7 +12,7 @@ namespace CompanyProjectManagement.Data.Model
     public class Projects
     {
         [XmlElement(ElementName = "project")]
-        public Project[] Project { get; set; }
+        public List<Project> ProjectList { get; set; }
     }
 
     public class Project

@@ -25,4 +25,14 @@
 		<abbreviation>CK-Delvita</abbreviation>
 		<customer>Delvita, a. s.</customer>
 	</project>
+	<project id="prj6">
+		<name>string1</name>
+		<abbreviation>string1</abbreviation>
+		<customer>string1</customer>
+	</project>
+	<project id="prj7">
+		<name>string</name>
+		<abbreviation>string</abbreviation>
+		<customer>string</customer>
+	</project>
 </projects>

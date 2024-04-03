@@ -61,6 +61,7 @@ namespace CompanyProjectManagement.Service
             if (model.Customer.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(model.Customer));
 
+            await _projectRepository.UpdateAsync(model);
             return await _projectRepository.GetByIdAsync(model.Id);
         }
     }

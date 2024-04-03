@@ -8,7 +8,7 @@ namespace CompanyProjectManagement.Controllers
 {
     [ApiExplorerSettings(GroupName = "project")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/project")]
     public class ProjectController : BaseController
     {

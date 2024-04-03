@@ -38,6 +38,27 @@ namespace CompanyProjectManagement.Data
             return data;
         }
 
+        public void WriteData(T data)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Encoding = Encoding.GetEncoding("windows-1250"), 
+                Indent = true, 
+                IndentChars = "\t",
+                OmitXmlDeclaration = false,
+            };
+
+            XmlSerializerNamespaces emptyNamespaces = new XmlSerializerNamespaces();
+            emptyNamespaces.Add("", "");
+
+            using (var writer = XmlWriter.Create(_filePath, settings))
+            {
+                serializer.Serialize(writer, data, emptyNamespaces);
+            }
+        }
+
         private string GetFileStreamString(Stream fileStream)
         {
             StreamReader streamReader;
