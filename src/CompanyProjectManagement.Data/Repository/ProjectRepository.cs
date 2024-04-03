@@ -115,6 +115,9 @@ namespace CompanyProjectManagement.Data.Repository
 
             var project = xmlData.ProjectList.FirstOrDefault(p => p.Id == model.Id);
 
+            if (project == null)
+                throw new InvalidOperationException($"{model.Id} was not found");
+
             project.Name = model.Name;
             project.Abbrevation = model.Abbrevation;
             project.Customer = model.Customer;
