@@ -62,7 +62,25 @@ namespace CompanyProjectManagement.Data.Repository
 
         public Task<ProjectModel> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            string filePath = _configuration["AppSettings:XmlFilesPath"];
+            string fileName = "Project.xml";
+            string fullPath = filePath + "//" + fileName;
+            var xmlReader = new XmlFileManager<Projects>(fullPath);
+
+            var xmlData = xmlReader.ReadData();
+            var project = xmlData.Project.FirstOrDefault(p => p.Id == id);
+
+            if (project == null)
+                throw new InvalidOperationException($"{ id } was not found");
+
+
+            var projectModel = new ProjectModel();
+            projectModel.Id = project.Id;
+            projectModel.Name = project.Name;
+            projectModel.Abbrevation = project.Abbrevation;
+            projectModel.Customer = project.Customer;
+
+            return Task.FromResult(projectModel);
         }
 
         public Task UpdateAsync(ProjectModel model)
