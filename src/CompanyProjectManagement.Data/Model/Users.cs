@@ -10,15 +10,18 @@ namespace CompanyProjectManagement.Data.Model
         public List<User> UserList { get; set; }
     }
 
-    public class User
+    public class User : UserBaseModel
+    {
+        [XmlElement(ElementName = "password")]
+        public virtual string Password { get; set; }
+    }
+
+    public class UserBaseModel
     {
         [XmlAttribute(AttributeName = "id")]
-        public Guid UserId { get; set; }
+        public virtual Guid UserId { get; set; }
 
         [XmlElement(ElementName = "username")]
-        public string UserName { get; set; }
-
-        [XmlElement(ElementName = "password")]
-        public string Password { get; set; }
+        public virtual string UserName { get; set; }
     }
 }

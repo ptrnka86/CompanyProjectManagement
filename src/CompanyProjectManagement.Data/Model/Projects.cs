@@ -12,21 +12,26 @@ namespace CompanyProjectManagement.Data.Model
     public class Projects
     {
         [XmlElement(ElementName = "project")]
-        public List<Project> ProjectList { get; set; }
+        public List<ProjectDataModel> ProjectList { get; set; }
     }
 
-    public class Project
+    public class ProjectDataModel : ProjectBaseModel
     {
         [XmlAttribute(AttributeName = "id")]
-        public string Id { get; set; }
+        public virtual string Id { get; set; }
+    }
 
+    public class ProjectBaseModel
+    {
         [XmlElement(ElementName = "name")]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [XmlElement(ElementName = "abbreviation")]
-        public string Abbrevation { get; set; }
+        public virtual string Abbrevation { get; set; }
 
         [XmlElement(ElementName = "customer")]
-        public string Customer { get; set; }
+        public virtual string Customer { get; set; }
     }
+
+
 }

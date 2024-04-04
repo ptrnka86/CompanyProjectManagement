@@ -30,7 +30,7 @@ namespace CompanyProjectManagement.Data.Repository
  
             var xmlData = GetAllXMLData();
 
-            var newProject = new Project();
+            var newProject = new ProjectDataModel();
 
             newProject.Id = GetNewId(xmlData);
             newProject.Name = model.Name;
@@ -125,7 +125,7 @@ namespace CompanyProjectManagement.Data.Repository
             return Task.CompletedTask;
         }
 
-        private ProjectModel GetProjectModel(Project project)
+        private ProjectModel GetProjectModel(ProjectDataModel project)
         {
             var projectModel = new ProjectModel();
             projectModel.Id = project.Id;
